@@ -143,12 +143,12 @@ python -c "from ultralytics import YOLO; m=YOLO('configs/bfam-net.yaml', verbose
 Run the test suite:
 
 ```bash
-pytest tests/test_bfam_modules.py tests/smoke_test.py
+pytest tests/test_bfam_modules.py
 ```
 
-The smoke test checks that all four custom modules are registered, the model
-has `8/16/32` output strides, and a random tensor can pass through the full
-detector.
+The module tests check the output shapes and numerical validity of all four
+custom modules. The model build check above validates registration and a full
+detector forward pass without requiring a dataset or checkpoint.
 
 ## Manuscript Results
 

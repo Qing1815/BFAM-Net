@@ -112,11 +112,11 @@ python -c "from ultralytics import YOLO; m=YOLO('configs/bfam-net.yaml', verbose
 运行测试：
 
 ```bash
-pytest tests/test_bfam_modules.py tests/smoke_test.py
+pytest tests/test_bfam_modules.py
 ```
 
-测试会检查四个自定义模块是否注册、模型输出步长是否为 `8/16/32`，以及随机输入
-能否完成整网前向传播。
+模块测试会检查四个自定义模块的输出形状和数值有效性。上面的模型构建命令会在不需要
+数据集或权重的情况下检查模块注册，并执行一次完整检测器前向传播。
 
 ## 稿件结果说明
 
