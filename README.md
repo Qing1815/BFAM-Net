@@ -165,18 +165,18 @@ none of which are included here.
 The custom modules were organized from the manuscript and the three local
 reference papers supplied with the project:
 
-1. Hu, Z., Zhai, B., Zhao, Z., et al. “State-Space-Model-Guided Deep Feature
+1. Hu, Z., Zhai, B., Zhao, Z., et al. "State-Space-Model-Guided Deep Feature
    Perception Network for Insulator Defect Detection in High-Resolution Aerial
-   Images.” *IEEE Transactions on Geoscience and Remote Sensing*, 63 (2025).
+   Images." *IEEE Transactions on Geoscience and Remote Sensing*, 63 (2025).
    DOI: `10.1109/TGRS.2025.3584663`. This is the primary reference for BFRE
    and BCFM concepts, corresponding to BFEM and DFRM in the paper.
-2. Wu, S., Lu, X., Guo, C., and Guo, H. “MV-YOLO: An Efficient Small Object
-   Detection Framework Based on Mamba.” *IEEE Transactions on Geoscience and
+2. Wu, S., Lu, X., Guo, C., and Guo, H. "MV-YOLO: An Efficient Small Object
+   Detection Framework Based on Mamba." *IEEE Transactions on Geoscience and
    Remote Sensing*, 63 (2025). DOI: `10.1109/TGRS.2025.3584955`. This is the
    primary reference for contextual semantic guidance and dynamic upsampling,
    corresponding to CCGM/DySample in the paper.
-3. Wang, J. and Yan, C. “CEVG-RTNet: A Real-Time Architecture for Robust
-   Forest Fire Smoke Detection in Complex Environments.” *Neural Networks*,
+3. Wang, J. and Yan, C. "CEVG-RTNet: A Real-Time Architecture for Robust
+   Forest Fire Smoke Detection in Complex Environments." *Neural Networks*,
    194 (2026), 108187. DOI: `10.1016/j.neunet.2025.108187`. This is the
    primary reference for the hierarchical residual feature alignment design,
    especially ERFB, VGCA-style aggregation, MLP enhancement, and gating.

@@ -23,13 +23,15 @@ ultralytics/settings.json
 ultralytics/assets/
 
 # Datasets, labels, model artifacts, and experiment outputs
-datasets/
-dataset/
-data/
-images/
-labels/
-runs/
-weights/
+/datasets/
+/dataset/
+/data/
+/images/
+/labels/
+/runs/
+/weights/
+/.weights/
+ultralytics/cfg/datasets/
 *.cache
 *.pt
 *.pth
