@@ -17,7 +17,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--weights", type=Path, required=True)
     parser.add_argument("--data", type=Path, required=True)
     parser.add_argument("--imgsz", type=int, default=640)
-    parser.add_argument("--batch", type=int, default=8)
+    parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--device", default=None)
     parser.add_argument("--split", choices=("val", "test"), default="val")
     return parser.parse_args()

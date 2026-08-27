@@ -18,13 +18,14 @@ class ERFB(nn.Module):
 
     def __init__(self, c1: int, c2: int):
         super().__init__()
-        self.conv1 = Conv(c1, c2, 3, 1)
-        self.conv2 = Conv(c2, c2, 3, 1, act=False)
-        self.skip = nn.Identity() if c1 == c2 else Conv(c1, c2, 1, 1, act=False)
-        self.activation = nn.SiLU(inplace=True)
+        self.conv1 = nn.Conv2d(c1, c2, 3, padding=1)
+        self.conv2 = nn.Conv2d(c2, c2, 3, padding=1)
+        self.skip = nn.Identity() if c1 == c2 else nn.Conv2d(c1, c2, 1)
+        self.activation = nn.LeakyReLU(0.2, inplace=True)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        return self.activation(self.conv2(self.conv1(x)) + self.skip(x))
+        out = self.activation(self.conv1(x))
+        return self.activation(self.conv2(out) + self.skip(x))
 
 
 class VGCABlock(nn.Module):
@@ -77,7 +78,7 @@ class RFAM(nn.Module):
         c1: int,
         c2: int | None = None,
         reduction_ratio: float = 0.25,
-        enhanced_mode: bool | None = None,
+        enhanced_mode: bool = False,
     ):
         super().__init__()
         if c1 <= 0:
@@ -89,7 +90,9 @@ class RFAM(nn.Module):
             raise ValueError(f"reduction_ratio must be in (0, 1], got {reduction_ratio}")
 
         self.c1, self.c2 = int(c1), c2
-        self.enhanced_mode = self.c2 >= 512 if enhanced_mode is None else bool(enhanced_mode)
+        # The supplied experiment YAML did not enable the optional VGCA/FFN
+        # branch.  Keep that choice explicit and stable after width scaling.
+        self.enhanced_mode = bool(enhanced_mode)
         self.input_projection = Conv(self.c1, self.c2, 1, 1)
         self.mlp = nn.Sequential(
             nn.Conv2d(self.c2, self.c2 * 2, 1, bias=False),

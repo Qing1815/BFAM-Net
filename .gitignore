@@ -47,3 +47,4 @@ ultralytics/cfg/datasets/
 *.log
 .env
 configs/local*.yaml
+/configs/lunar-crater.yaml

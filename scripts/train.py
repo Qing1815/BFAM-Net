@@ -20,7 +20,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--model", type=Path, default=DEFAULT_MODEL, help="BFAM-Net model YAML")
     parser.add_argument("--pretrained", type=Path, help="Optional compatible checkpoint for partial weight transfer")
     parser.add_argument("--epochs", type=int, default=150)
-    parser.add_argument("--batch", type=int, default=8)
+    parser.add_argument("--batch", type=int, default=16)
     parser.add_argument("--imgsz", type=int, default=640)
     parser.add_argument("--device", default=None, help="CUDA device, 'cpu', or 'mps'")
     parser.add_argument("--workers", type=int, default=4)

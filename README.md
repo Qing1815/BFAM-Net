@@ -34,6 +34,12 @@ corresponding reference implementations into `ultralytics/nn/modules/bfam.py`.
 It is therefore a cleaned reproducibility implementation, not a
 binary-identical export of the original experiment directory.
 
+The supplied experiment YAML places BFRE before SPPF/C2PSA at the deepest
+backbone stages, while the manuscript prose describes BFRE as receiving the
+output of C2PSA. `configs/bfam-net.yaml` preserves the supplied experiment
+topology and records this discrepancy in its comments. The repository does
+not claim that the public reconstruction resolves that source inconsistency.
+
 ## Installation
 
 Python 3.10 or newer is recommended. Install PyTorch for the target CPU or
@@ -74,9 +80,18 @@ Each image must have a matching YOLO label file under the corresponding
 `labels` directory. The label format is one zero-based class id followed by
 normalized `x_center y_center width height` values per line.
 
+The manuscript dataset used ShadowCam imagery from KPLO/Danuri at roughly
+1.7 m/pixel, tiled to 608 x 608 pixels, with three scale classes: `S-crater`
+below 30 pixels, `L-crater` above 200 pixels, and `M-crater` otherwise. The
+reported workflow included grayscale GeoTIFF preprocessing, augmentation to
+2,000 samples, PNG conversion with geospatial JSON metadata, LabelImg
+annotations, and a 7:2:1 split. These processing materials and source images
+are intentionally outside this repository; the example YAML is only a
+dataset-path template.
+
 ## Training
 
-The manuscript settings are used by default: 150 epochs, batch size 8,
+The manuscript settings are used by default: 150 epochs, batch size 16,
 640-pixel input, SGD, `lr0=0.01`, momentum `0.937`, weight decay `0.0005`,
 and patience 30.
 
@@ -90,7 +105,7 @@ Useful overrides:
 python scripts/train.py \
   --data /path/to/lunar-crater.yaml \
   --epochs 150 \
-  --batch 8 \
+  --batch 16 \
   --imgsz 640 \
   --device 0 \
   --workers 4
@@ -147,8 +162,9 @@ pytest tests/test_bfam_modules.py
 ```
 
 The module tests check the output shapes and numerical validity of all four
-custom modules. The model build check above validates registration and a full
-detector forward pass without requiring a dataset or checkpoint.
+custom modules, including the grouped sub-pixel offset layout used by CSCG.
+The model build check above validates registration and a full detector forward
+pass without requiring a dataset or checkpoint.
 
 ## Manuscript Results
 

@@ -26,6 +26,8 @@ BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑
 接口进行了重建，并将实现集中到 `ultralytics/nn/modules/bfam.py`。这是一个经过
 整理的可复现实现，不声称与原始实验目录逐字节或二进制完全一致。
 
+需要特别区分稿件文字与原始实验配置：原始实验 YAML 在最深层 backbone 中将 BFRE 放在 SPPF/C2PSA 之前，而稿件正文描述 BFRE 接收 C2PSA 的输出。configs/bfam-net.yaml 保留了原始实验配置的拓扑，并在文件注释中记录这一差异；本仓库不宣称已经消除了这一来源不一致。
+
 ## 安装
 
 建议使用 Python 3.10 或更高版本。请先根据目标 CPU 或 CUDA 环境安装 PyTorch，
@@ -63,9 +65,11 @@ names:
 每张图像都应在对应的 `labels` 目录下有同名标注文件。每行格式为：从 0 开始的
 类别编号，以及归一化的 `x_center y_center width height`。
 
+稿件中的数据来自 KPLO/Danuri 的 ShadowCam 影像，空间分辨率约为 1.7 m/pixel，裁切尺寸为 608 x 608 像素。三类目标按尺寸划分：小于 30 像素为 S-crater，大于 200 像素为 L-crater，其余为 M-crater。稿件所述流程还包括灰度 GeoTIFF 预处理、扩增至 2,000 个样本、PNG 转换及地理 JSON 元数据、LabelImg 标注和 7:2:1 数据划分。上述影像和处理材料不放入本仓库，示例 YAML 仅用于填写本地数据路径。
+
 ## 训练
 
-训练脚本默认采用稿件表格中的主要设置：150 个 epoch、batch size 为 8、输入尺寸
+训练脚本默认采用稿件表格中的主要设置：150 个 epoch、batch size 为 16、输入尺寸
 640、SGD、`lr0=0.01`、momentum `0.937`、weight decay `0.0005`、patience 30。
 
 ```bash
@@ -115,7 +119,7 @@ python -c "from ultralytics import YOLO; m=YOLO('configs/bfam-net.yaml', verbose
 pytest tests/test_bfam_modules.py
 ```
 
-模块测试会检查四个自定义模块的输出形状和数值有效性。上面的模型构建命令会在不需要
+模块测试会检查四个自定义模块的输出形状、数值有效性，以及 CSCG 分组子像素偏移布局。上面的模型构建命令会在不需要
 数据集或权重的情况下检查模块注册，并执行一次完整检测器前向传播。
 
 ## 稿件结果说明

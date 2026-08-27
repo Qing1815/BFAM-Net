@@ -142,7 +142,12 @@ class BFRE(nn.Module):
 
 
 class _ChannelContext(nn.Module):
-    """Channel-context branch used by BCFM."""
+    """Channel-context branch used by BCFM.
+
+    The attention matrix is channel-by-channel (``C x C``), matching the
+    reference DC-channel attention.  Keeping the spatial dimension in the
+    feature/value tensors avoids constructing a quadratic ``HW x HW`` matrix.
+    """
 
     def __init__(self, channels: int):
         super().__init__()
@@ -156,6 +161,8 @@ class _ChannelContext(nn.Module):
         query = self.query(x).flatten(2)
         key = self.key(x).flatten(2)
         value = self.value(x).flatten(2)
+        # Scale by the dot-product width, as in channel attention.  This is
+        # deliberately independent of the number of spatial locations.
         attention = torch.softmax(torch.matmul(query, key.transpose(1, 2)) / math.sqrt(height * width), dim=-1)
         return self.output(torch.matmul(attention, value).reshape(batch, channels, height, width))
 
@@ -186,33 +193,76 @@ class BCFM(nn.Module):
 
 
 class _DynamicUpsample(nn.Module):
-    """Learned offset sampling used by CSCG."""
+    """Grouped learned-offset sampling used by CSCG.
 
-    def __init__(self, channels: int, scale_factor: int = 2):
+    The offset layout follows the supplied DySample reference: every channel
+    group receives an offset for each sub-pixel location, giving
+    ``2 * groups * scale^2`` predicted offsets per input pixel.
+    """
+
+    def __init__(self, channels: int, scale_factor: int = 2, groups: int = 4):
         super().__init__()
+        if scale_factor < 1:
+            raise ValueError(f"scale_factor must be positive, got {scale_factor}")
+        if channels % groups != 0:
+            raise ValueError(f"channels ({channels}) must be divisible by groups ({groups})")
         self.scale_factor = scale_factor
+        self.groups = groups
         self.offset = nn.Sequential(
             nn.Conv2d(channels, channels, 1, bias=False),
             nn.BatchNorm2d(channels),
             nn.SiLU(inplace=True),
-            nn.Conv2d(channels, 2, 1),
+            nn.Conv2d(channels, 2 * groups * scale_factor * scale_factor, 1),
         )
         nn.init.zeros_(self.offset[-1].weight)
         nn.init.zeros_(self.offset[-1].bias)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        _, _, height, width = x.shape
+        batch, channels, height, width = x.shape
         out_height, out_width = height * self.scale_factor, width * self.scale_factor
-        offset = F.interpolate(self.offset(x), size=(out_height, out_width), mode="bilinear", align_corners=False)
-        offset = torch.tanh(offset) * 0.25
+        offset = self.offset(x)
+        offset = offset.view(
+            batch,
+            self.groups,
+            2,
+            self.scale_factor,
+            self.scale_factor,
+            height,
+            width,
+        )
+        offset = offset.permute(0, 1, 5, 3, 6, 4, 2).contiguous()
+        offset = offset.view(batch, self.groups, out_height, out_width, 2)
+
+        # Build the base grid in input-pixel coordinates, then normalize it
+        # for grid_sample with align_corners=True.
         grid_y, grid_x = torch.meshgrid(
-            torch.linspace(-1.0, 1.0, out_height, device=x.device, dtype=x.dtype),
-            torch.linspace(-1.0, 1.0, out_width, device=x.device, dtype=x.dtype),
+            torch.arange(out_height, device=x.device, dtype=torch.float32) / self.scale_factor,
+            torch.arange(out_width, device=x.device, dtype=torch.float32) / self.scale_factor,
             indexing="ij",
         )
-        grid = torch.stack((grid_x, grid_y), dim=-1).unsqueeze(0)
-        grid = grid + offset.permute(0, 2, 3, 1)
-        return F.grid_sample(x, grid, mode="bilinear", padding_mode="border", align_corners=True)
+        grid = torch.stack((grid_x, grid_y), dim=-1).unsqueeze(0).unsqueeze(0)
+        grid = grid + offset.float()
+        if width > 1:
+            grid[..., 0] = 2.0 * grid[..., 0] / (width - 1) - 1.0
+        else:
+            grid[..., 0] = 0
+        if height > 1:
+            grid[..., 1] = 2.0 * grid[..., 1] / (height - 1) - 1.0
+        else:
+            grid[..., 1] = 0
+
+        grouped_x = x.reshape(batch * self.groups, channels // self.groups, height, width)
+        grouped_grid = grid.expand(batch, self.groups, -1, -1, -1).reshape(
+            batch * self.groups, out_height, out_width, 2
+        )
+        sampled = F.grid_sample(
+            grouped_x.float(),
+            grouped_grid,
+            mode="bilinear",
+            padding_mode="border",
+            align_corners=True,
+        )
+        return sampled.to(dtype=x.dtype).reshape(batch, channels, out_height, out_width)
 
 
 class CSCG(nn.Module):

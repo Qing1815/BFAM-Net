@@ -1,4 +1,10 @@
-# BFAM-Net for lunar crater scale-class detection
+# BFAM-Net for lunar crater scale-class detection.
+#
+# The layer placement follows the supplied experiment YAML.  The manuscript's
+# prose states that BFRE receives C2PSA output, whereas that YAML places BFRE
+# before SPPF/C2PSA.  This discrepancy is documented in the README; this
+# cleaned configuration preserves the supplied experiment topology so that
+# its layer indices and reported scale branches remain auditable.
 # [from, repeats, module, args]
 
 nc: 3
