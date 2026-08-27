@@ -1,10 +1,7 @@
 # BFAM-Net for lunar crater scale-class detection.
 #
-# The layer placement follows the supplied experiment YAML.  The manuscript's
-# prose states that BFRE receives C2PSA output, whereas that YAML places BFRE
-# before SPPF/C2PSA.  This discrepancy is documented in the README; this
-# cleaned configuration preserves the supplied experiment topology so that
-# its layer indices and reported scale branches remain auditable.
+# The layer placement follows the manuscript description: BFRE receives the
+# output of C2PSA at the deepest backbone stage.
 # [from, repeats, module, args]
 
 nc: 3
@@ -18,36 +15,34 @@ backbone:
   - [-1, 2, RFAM, [128, 0.25]]
   - [-1, 1, Conv, [256, 3, 2]]
   - [-1, 2, RFAM, [256, 0.25]]
-  - [-1, 1, BFRE, [256]]
   - [-1, 1, Conv, [512, 3, 2]]
   - [-1, 2, RFAM, [512, 0.25]]
-  - [-1, 1, BFRE, [512]]
   - [-1, 1, Conv, [512, 3, 2]]
   - [-1, 2, RFAM, [512, 0.25]]
-  - [-1, 1, BFRE, [512]]
   - [-1, 1, SPPF, [512, 5]]
   - [-1, 2, C2PSA, [512]]
+  - [-1, 1, BFRE, [512]]
 
 head:
   # P5 -> P4. CSCG performs content-aware 2x upsampling internally.
-  - [[13, 8], 1, CSCG, [auto, auto, auto, 2]]
+  - [[11, 6], 1, CSCG, [auto, auto, auto, 2]]
   - [-1, 2, RFAM, [512, 0.25]]
   - [-1, 1, BCFM, [512, 0.25]]
 
   # P4 -> P3.
-  - [[16, 5], 1, CSCG, [auto, auto, auto, 2]]
+  - [[14, 4], 1, CSCG, [auto, auto, auto, 2]]
   - [-1, 2, RFAM, [256, 0.25]]
   - [-1, 1, BCFM, [256, 0.25]]
 
   # Bottom-up path.
   - [-1, 1, Conv, [256, 3, 2]]
-  - [[-1, 16], 1, Concat, [1]]
-  - [-1, 2, RFAM, [512, 0.25]]
-  - [-1, 1, BCFM, [512, 0.25]]
-
-  - [-1, 1, Conv, [512, 3, 2]]
   - [[-1, 13], 1, Concat, [1]]
   - [-1, 2, RFAM, [512, 0.25]]
   - [-1, 1, BCFM, [512, 0.25]]
 
-  - [[19, 23, 27], 1, Detect, [nc]]
+  - [-1, 1, Conv, [512, 3, 2]]
+  - [[-1, 11], 1, Concat, [1]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BCFM, [512, 0.25]]
+
+  - [[17, 21, 25], 1, Detect, [nc]]

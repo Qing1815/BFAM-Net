@@ -26,20 +26,6 @@ checkpoint, or experiment result**. Supply a local YOLO-format dataset YAML
 when training or validating. The file `configs/lunar-crater.example.yaml`
 is only a path and class-name template.
 
-The original experiment directory did not contain registered `BFRE`, `BCFM`,
-or `CSCG` classes under those final names. It contained related experimental
-implementations named `BFEM`, `DFRM`, and `CCGM`. This repository reconstructs
-the final BFAM-Net interfaces from the manuscript and consolidates the
-corresponding reference implementations into `ultralytics/nn/modules/bfam.py`.
-It is therefore a cleaned reproducibility implementation, not a
-binary-identical export of the original experiment directory.
-
-The supplied experiment YAML places BFRE before SPPF/C2PSA at the deepest
-backbone stages, while the manuscript prose describes BFRE as receiving the
-output of C2PSA. `configs/bfam-net.yaml` preserves the supplied experiment
-topology and records this discrepancy in its comments. The repository does
-not claim that the public reconstruction resolves that source inconsistency.
-
 ## Installation
 
 Python 3.10 or newer is recommended. Install PyTorch for the target CPU or
@@ -166,47 +152,8 @@ custom modules, including the grouped sub-pixel offset layout used by CSCG.
 The model build check above validates registration and a full detector forward
 pass without requiring a dataset or checkpoint.
 
-## Manuscript Results
-
-The manuscript reports BFAM-Net results of 4.75M parameters, 11.40 GFLOPs,
-78.73 FPS, and 94.2% mAP on its Impact_crater_datas evaluation. It reports
-BFAM-Tiny at 93.1% mAP and 6.14 MB. These numbers are **manuscript-reported
-results** and are not claimed as a re-run result of this repository. Exact
-matching requires the original data split, preprocessing, augmentation,
-training environment, pruning/distillation recipe, and trained weights,
-none of which are included here.
-
-## Reference Basis
-
-The custom modules were organized from the manuscript and the three local
-reference papers supplied with the project:
-
-1. Hu, Z., Zhai, B., Zhao, Z., et al. "State-Space-Model-Guided Deep Feature
-   Perception Network for Insulator Defect Detection in High-Resolution Aerial
-   Images." *IEEE Transactions on Geoscience and Remote Sensing*, 63 (2025).
-   DOI: `10.1109/TGRS.2025.3584663`. This is the primary reference for BFRE
-   and BCFM concepts, corresponding to BFEM and DFRM in the paper.
-2. Wu, S., Lu, X., Guo, C., and Guo, H. "MV-YOLO: An Efficient Small Object
-   Detection Framework Based on Mamba." *IEEE Transactions on Geoscience and
-   Remote Sensing*, 63 (2025). DOI: `10.1109/TGRS.2025.3584955`. This is the
-   primary reference for contextual semantic guidance and dynamic upsampling,
-   corresponding to CCGM/DySample in the paper.
-3. Wang, J. and Yan, C. "CEVG-RTNet: A Real-Time Architecture for Robust
-   Forest Fire Smoke Detection in Complex Environments." *Neural Networks*,
-   194 (2026), 108187. DOI: `10.1016/j.neunet.2025.108187`. This is the
-   primary reference for the hierarchical residual feature alignment design,
-   especially ERFB, VGCA-style aggregation, MLP enhancement, and gating.
-
-The local PDF copies are not redistributed in this code repository.
-
 ## License
 
 This repository contains modified Ultralytics source code and custom BFAM-Net
 modules. It is distributed under the GNU Affero General Public License,
 version 3 or later. See `LICENSE` and `NOTICE.md` for the derivation notice.
-
-## Citation
-
-The manuscript citation details were not supplied as a finalized bibliographic
-record. Add the accepted paper's author list, title, venue, year, and DOI here
-before publishing a release citation. Do not infer missing citation metadata.

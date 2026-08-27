@@ -21,13 +21,6 @@ BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑
 命令行传入本地 YOLO 数据集 YAML。`configs/lunar-crater.example.yaml` 只是路径和
 类别名称模板。
 
-原始实验目录中没有以最终名称注册的 `BFRE`、`BCFM` 和 `CSCG` 类，只有名称不同的
-实验模块 `BFEM`、`DFRM` 和 `CCGM`。因此，本仓库依据稿件最终术语和三篇参考文献对
-接口进行了重建，并将实现集中到 `ultralytics/nn/modules/bfam.py`。这是一个经过
-整理的可复现实现，不声称与原始实验目录逐字节或二进制完全一致。
-
-需要特别区分稿件文字与原始实验配置：原始实验 YAML 在最深层 backbone 中将 BFRE 放在 SPPF/C2PSA 之前，而稿件正文描述 BFRE 接收 C2PSA 的输出。configs/bfam-net.yaml 保留了原始实验配置的拓扑，并在文件注释中记录这一差异；本仓库不宣称已经消除了这一来源不一致。
-
 ## 安装
 
 建议使用 Python 3.10 或更高版本。请先根据目标 CPU 或 CUDA 环境安装 PyTorch，
@@ -122,40 +115,7 @@ pytest tests/test_bfam_modules.py
 模块测试会检查四个自定义模块的输出形状、数值有效性，以及 CSCG 分组子像素偏移布局。上面的模型构建命令会在不需要
 数据集或权重的情况下检查模块注册，并执行一次完整检测器前向传播。
 
-## 稿件结果说明
-
-稿件报告 BFAM-Net 在其 Impact_crater_datas 评估中的结果为：4.75M 参数、11.40
-GFLOPs、78.73 FPS 和 94.2% mAP；BFAM-Tiny 的 mAP 为 93.1%，模型大小为 6.14 MB。
-这些是**稿件报告结果**，不是本仓库重新训练得到的结果。要精确复现，需要原始数据
-划分、预处理、数据增强、训练环境、剪枝与知识蒸馏方案以及训练权重，而这些内容
-均未放入仓库。
-
-## 参考依据
-
-自定义模块根据稿件和用户提供的三篇本地参考文献整理：
-
-1. Hu, Z., Zhai, B., Zhao, Z., et al. "State-Space-Model-Guided Deep Feature
-   Perception Network for Insulator Defect Detection in High-Resolution Aerial
-   Images." *IEEE Transactions on Geoscience and Remote Sensing*, 63 (2025).
-   DOI: `10.1109/TGRS.2025.3584663`。该文是 BFRE、BCFM 设计的主要依据，原文名称
-   分别对应 BFEM、DFRM。
-2. Wu, S., Lu, X., Guo, C., and Guo, H. "MV-YOLO: An Efficient Small Object
-   Detection Framework Based on Mamba." *IEEE Transactions on Geoscience and
-   Remote Sensing*, 63 (2025). DOI: `10.1109/TGRS.2025.3584955`。该文是 CSCG
-   及动态上采样设计的主要依据，原文名称对应 CCGM/DySample。
-3. Wang, J. and Yan, C. "CEVG-RTNet: A Real-Time Architecture for Robust
-   Forest Fire Smoke Detection in Complex Environments." *Neural Networks*,
-   194 (2026), 108187. DOI: `10.1016/j.neunet.2025.108187`。该文是 RFAM 设计的
-   主要依据，尤其参考 ERFB、VGCA 风格聚合、MLP 增强和门控结构。
-
-本仓库不重新分发上述文献 PDF。
-
 ## 许可证
 
 本仓库包含修改后的 Ultralytics 源代码和 BFAM-Net 自定义模块，按 GNU Affero
 通用公共许可证第三版或更高版本发布。详见 `LICENSE` 和 `NOTICE.md`。
-
-## 引用
-
-稿件最终的作者、题名、期刊、年份和 DOI 信息尚未作为完整书目信息提供。正式发布
-前请补充已接收论文的准确引用信息，不要自行推断缺失的书目字段。
