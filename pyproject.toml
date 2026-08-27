@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=70.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bfam-net"
+version = "0.1.0"
+description = "A cleaned YOLO11-based BFAM-Net implementation for lunar crater detection"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0-or-later" }
+keywords = ["BFAM-Net", "YOLO11", "lunar crater", "object detection", "state space model"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "numpy>=1.23.0",
+    "matplotlib>=3.3.0",
+    "opencv-python>=4.6.0",
+    "pillow>=7.1.2",
+    "pyyaml>=5.3.1",
+    "requests>=2.23.0",
+    "scipy>=1.4.1",
+    "torch>=2.0.0",
+    "torchvision>=0.15.0",
+    "psutil>=5.9.0",
+    "polars>=0.20.0",
+    "ultralytics-thop>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "ruff>=0.6"]
+export = ["onnx>=1.12.0", "onnxslim>=0.1.34"]
+
+[project.scripts]
+yolo = "ultralytics.cfg:entrypoint"
+ultralytics = "ultralytics.cfg:entrypoint"
+
+[tool.setuptools]
+packages = { find = { where = ["."], include = ["ultralytics", "ultralytics.*"] } }
+
+[tool.setuptools.package-data]
+ultralytics = ["py.typed", "cfg/**/*.yaml", "solutions/templates/*.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"

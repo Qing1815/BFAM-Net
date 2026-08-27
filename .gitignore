@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
+
+# Environments and editors
+.venv/
+venv/
+env/
+.idea/
+.vscode/
+.DS_Store
+
+# Local Ultralytics state and bundled demo media
+.yolo-config/
+ultralytics/settings.json
+ultralytics/assets/
+
+# Datasets, labels, model artifacts, and experiment outputs
+datasets/
+dataset/
+data/
+images/
+labels/
+runs/
+weights/
+*.cache
+*.pt
+*.pth
+*.onnx
+*.engine
+*.tflite
+*.torchscript
+*.mlmodel
+*.pb
+*.saved_model/
+
+# Logs and local overrides
+*.log
+.env
+configs/local*.yaml

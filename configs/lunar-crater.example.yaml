@@ -1,0 +1,10 @@
+# Replace this path with the local YOLO-format dataset root.
+path: /absolute/path/to/lunar-crater-dataset
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: L-crater
+  1: M-crater
+  2: S-crater

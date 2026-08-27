@@ -1,0 +1,47 @@
+# BFAM-Net for lunar crater scale-class detection
+# [from, repeats, module, args]
+
+nc: 3
+scale: n
+scales:
+  n: [0.50, 0.25, 1024]
+
+backbone:
+  - [-1, 1, Conv, [64, 3, 2]]
+  - [-1, 1, Conv, [128, 3, 2]]
+  - [-1, 2, RFAM, [128, 0.25]]
+  - [-1, 1, Conv, [256, 3, 2]]
+  - [-1, 2, RFAM, [256, 0.25]]
+  - [-1, 1, BFRE, [256]]
+  - [-1, 1, Conv, [512, 3, 2]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BFRE, [512]]
+  - [-1, 1, Conv, [512, 3, 2]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BFRE, [512]]
+  - [-1, 1, SPPF, [512, 5]]
+  - [-1, 2, C2PSA, [512]]
+
+head:
+  # P5 -> P4. CSCG performs content-aware 2x upsampling internally.
+  - [[13, 8], 1, CSCG, [auto, auto, auto, 2]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BCFM, [512, 0.25]]
+
+  # P4 -> P3.
+  - [[16, 5], 1, CSCG, [auto, auto, auto, 2]]
+  - [-1, 2, RFAM, [256, 0.25]]
+  - [-1, 1, BCFM, [256, 0.25]]
+
+  # Bottom-up path.
+  - [-1, 1, Conv, [256, 3, 2]]
+  - [[-1, 16], 1, Concat, [1]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BCFM, [512, 0.25]]
+
+  - [-1, 1, Conv, [512, 3, 2]]
+  - [[-1, 13], 1, Concat, [1]]
+  - [-1, 2, RFAM, [512, 0.25]]
+  - [-1, 1, BCFM, [512, 0.25]]
+
+  - [[19, 23, 27], 1, Detect, [nc]]
