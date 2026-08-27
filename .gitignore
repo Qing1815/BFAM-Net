@@ -49,5 +49,5 @@ ultralytics/cfg/datasets/
 configs/local*.yaml
 /configs/lunar-crater.yaml
 
-# Keep the local CI workflow out of this OAuth-scoped release.
+# Keep the local CI workflow out of the public source tree.
 /.github/workflows/tests.yml

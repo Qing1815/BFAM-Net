@@ -1,4 +1,4 @@
-"""Train BFAM-Net with the manuscript training defaults."""
+"""Train BFAM-Net."""
 
 from __future__ import annotations
 

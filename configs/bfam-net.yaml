@@ -1,7 +1,6 @@
 # BFAM-Net for lunar crater scale-class detection.
 #
-# The layer placement follows the manuscript description: BFRE receives the
-# output of C2PSA at the deepest backbone stage.
+# The deepest backbone path is SPPF -> C2PSA -> BFRE.
 # [from, repeats, module, args]
 
 nc: 3

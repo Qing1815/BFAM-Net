@@ -1,7 +1,7 @@
 # BFAM-Net
 
-BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑检测器。
-本仓库按照稿件中的最终模块名称整理：
+BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑检测器，包含四个
+自定义模块：
 
 - **BFRE**：双向特征表示增强模块，沿水平和垂直方向进行双向状态空间扫描，
   建模长程空间上下文。
@@ -12,8 +12,7 @@ BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑
 - **CSCG**：上下文语义内容引导模块，通过学习偏移的动态上采样，将低分辨率语义
   信息注入高分辨率特征。
 
-`configs/bfam-net.yaml` 按稿件使用三类陨石坑：`L-crater`、`M-crater` 和
-`S-crater`。
+`configs/bfam-net.yaml` 使用三类陨石坑：`L-crater`、`M-crater` 和 `S-crater`。
 
 ## 仓库范围
 
@@ -58,11 +57,9 @@ names:
 每张图像都应在对应的 `labels` 目录下有同名标注文件。每行格式为：从 0 开始的
 类别编号，以及归一化的 `x_center y_center width height`。
 
-稿件中的数据来自 KPLO/Danuri 的 ShadowCam 影像，空间分辨率约为 1.7 m/pixel，裁切尺寸为 608 x 608 像素。三类目标按尺寸划分：小于 30 像素为 S-crater，大于 200 像素为 L-crater，其余为 M-crater。稿件所述流程还包括灰度 GeoTIFF 预处理、扩增至 2,000 个样本、PNG 转换及地理 JSON 元数据、LabelImg 标注和 7:2:1 数据划分。上述影像和处理材料不放入本仓库，示例 YAML 仅用于填写本地数据路径。
-
 ## 训练
 
-训练脚本默认采用稿件表格中的主要设置：150 个 epoch、batch size 为 16、输入尺寸
+训练脚本默认设置为：150 个 epoch、batch size 为 16、输入尺寸
 640、SGD、`lr0=0.01`、momentum `0.937`、weight decay `0.0005`、patience 30。
 
 ```bash

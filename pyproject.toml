@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "bfam-net"
 version = "0.1.0"
-description = "A cleaned YOLO11-based BFAM-Net implementation for lunar crater detection"
+description = "A YOLO11-based BFAM-Net implementation for lunar crater detection"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "AGPL-3.0-or-later" }

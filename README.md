@@ -1,9 +1,8 @@
 # BFAM-Net
 
 BFAM-Net is a YOLO11-based object detector for impact-crater detection in
-lunar south-polar permanently shadowed regions (PSRs). The repository is a
-cleaned, source-tree implementation of the final module names used in the
-manuscript:
+lunar south-polar permanently shadowed regions (PSRs). The detector uses four
+custom modules:
 
 - **BFRE**: Bidirectional Feature Representation Enhancement. Directional
   state-space scans model long-range horizontal and vertical context.
@@ -15,9 +14,8 @@ manuscript:
 - **CSCG**: Contextual Semantic Content Guidance. Learned-offset upsampling
   injects low-resolution context into high-resolution features.
 
-The detector configuration in `configs/bfam-net.yaml` uses the three crater
-scale classes reported in the manuscript: `L-crater`, `M-crater`, and
-`S-crater`.
+The detector configuration in `configs/bfam-net.yaml` uses three crater scale
+classes: `L-crater`, `M-crater`, and `S-crater`.
 
 ## Repository Scope
 
@@ -66,18 +64,9 @@ Each image must have a matching YOLO label file under the corresponding
 `labels` directory. The label format is one zero-based class id followed by
 normalized `x_center y_center width height` values per line.
 
-The manuscript dataset used ShadowCam imagery from KPLO/Danuri at roughly
-1.7 m/pixel, tiled to 608 x 608 pixels, with three scale classes: `S-crater`
-below 30 pixels, `L-crater` above 200 pixels, and `M-crater` otherwise. The
-reported workflow included grayscale GeoTIFF preprocessing, augmentation to
-2,000 samples, PNG conversion with geospatial JSON metadata, LabelImg
-annotations, and a 7:2:1 split. These processing materials and source images
-are intentionally outside this repository; the example YAML is only a
-dataset-path template.
-
 ## Training
 
-The manuscript settings are used by default: 150 epochs, batch size 16,
+The default training settings are 150 epochs, batch size 16,
 640-pixel input, SGD, `lr0=0.01`, momentum `0.937`, weight decay `0.0005`,
 and patience 30.
 
