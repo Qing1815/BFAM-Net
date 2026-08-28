@@ -1,6 +1,6 @@
 # BFAM-Net
 
-BFAM-Net 是一个基于 YOLO架构的月球南极永久阴影区（PSR）陨石坑检测器，包含四个
+BFAM-Net 是一个基于 YOLO架构的月球南极永久阴影区（PSR）撞击坑检测网络，包含四个
 自定义模块：
 
 - **BFRE**：双向特征表示增强模块，沿水平和垂直方向进行双向状态空间扫描，
@@ -12,11 +12,12 @@ BFAM-Net 是一个基于 YOLO架构的月球南极永久阴影区（PSR）陨石
 - **CSCG**：上下文语义内容引导模块，通过学习偏移的动态上采样，将低分辨率语义
   信息注入高分辨率特征。
 
-`configs/bfam-net.yaml` 使用三类陨石坑：`L-crater`、`M-crater` 和 `S-crater`。
+模型结构：`configs/bfam-net.yaml` ；
+使用三类撞击坑：`L-crater`、`M-crater` 和 `S-crater`。
 
 ## 安装
 
-建议使用 Python 3.10 或更高版本。请先根据目标 CPU 或 CUDA 环境安装 PyTorch，
+建议使用 Python 3.10 或更高版本。请先根据自己电脑的 CUDA 环境自行安装 PyTorch环境，
 然后在仓库根目录执行：
 
 ```bash
@@ -91,7 +92,7 @@ python scripts/export.py \
 
 ## 构建和测试
 
-不需要数据集或权重即可构建模型：
+构建模型：
 
 ```bash
 python -c "from ultralytics import YOLO; m=YOLO('configs/bfam-net.yaml', verbose=False); m.model.info(imgsz=640)"
