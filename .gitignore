@@ -51,3 +51,6 @@ configs/local*.yaml
 
 # Keep the local CI workflow out of the public source tree.
 /.github/workflows/tests.yml
+
+# Keep the Chinese README available locally without publishing it.
+/README.zh-CN.md

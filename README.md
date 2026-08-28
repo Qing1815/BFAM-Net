@@ -41,7 +41,7 @@ pip install -e ".[export]"
 
 The model code uses the vendored Ultralytics source tree in this repository.
 The project is derived from Ultralytics and remains subject to the AGPL-3.0
-license; see `LICENSE` and `NOTICE.md`.
+license; see `LICENSE`.
 
 ## Dataset Format
 
@@ -145,4 +145,4 @@ pass without requiring a dataset or checkpoint.
 
 This repository contains modified Ultralytics source code and custom BFAM-Net
 modules. It is distributed under the GNU Affero General Public License,
-version 3 or later. See `LICENSE` and `NOTICE.md` for the derivation notice.
+version 3 or later. See `LICENSE`.
