@@ -1,7 +1,6 @@
 # BFAM-Net
 
-BFAM-Net 是一个基于 YOLO架构的月球南极永久阴影区（PSR）撞击坑检测网络，包含四个
-自定义模块：
+BFAM-Net 是一种用于月球南极永久阴影区（PSR）撞击坑检测的轻量高效双向特征感知方法，包含四个自定义模块：
 
 - **BFRE**：双向特征表示增强模块，沿水平和垂直方向进行双向状态空间扫描，
   建模长程空间上下文。
@@ -35,7 +34,7 @@ AGPL-3.0 许可证约束，详见 `LICENSE` 和 `NOTICE.md`。
 
 ## 数据集格式
 
-准备标准 YOLO 检测数据目录，并参考示例创建本地数据集 YAML：
+参考示例创建撞击坑数据集 YAML文件：
 
 ```yaml
 path: /absolute/path/to/lunar-crater-dataset
