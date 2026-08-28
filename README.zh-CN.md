@@ -104,7 +104,7 @@ python -c "from ultralytics import YOLO; m=YOLO('configs/bfam-net.yaml', verbose
 pytest tests/test_bfam_modules.py
 ```
 
-模块测试会检查四个自定义模块的输出形状、数值有效性，以及 CSCG 分组子像素偏移布局。上面的模型构建命令会在不需要
+模块测试会检查四个自定义模块的输出形状和 CSCG模块 分组子像素偏移布局。上面的模型构建命令会先在不需要
 数据集或权重的情况下检查模块注册，并执行一次完整检测器前向传播。
 
 ## 许可证
