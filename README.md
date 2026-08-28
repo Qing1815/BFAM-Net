@@ -1,8 +1,8 @@
 # BFAM-Net
 
-BFAM-Net is a YOLO11-based object detector for impact-crater detection in
-lunar south-polar permanently shadowed regions (PSRs). The detector uses four
-custom modules:
+BFAM-Net is a lightweight and efficient bidirectional feature-aware method for
+impact-crater detection in lunar south-polar permanently shadowed regions
+(PSRs). It contains four custom modules:
 
 - **BFRE**: Bidirectional Feature Representation Enhancement. Directional
   state-space scans model long-range horizontal and vertical context.
@@ -14,15 +14,8 @@ custom modules:
 - **CSCG**: Contextual Semantic Content Guidance. Learned-offset upsampling
   injects low-resolution context into high-resolution features.
 
-The detector configuration in `configs/bfam-net.yaml` uses three crater scale
+The model configuration is `configs/bfam-net.yaml` and uses three crater
 classes: `L-crater`, `M-crater`, and `S-crater`.
-
-## Repository Scope
-
-This repository intentionally contains **no dataset, image, annotation,
-checkpoint, or experiment result**. Supply a local YOLO-format dataset YAML
-when training or validating. The file `configs/lunar-crater.example.yaml`
-is only a path and class-name template.
 
 ## Installation
 
@@ -45,8 +38,7 @@ license; see `LICENSE`.
 
 ## Dataset Format
 
-Prepare a dataset using the standard YOLO detection layout and create a local
-dataset YAML based on the example:
+Create a local crater-detection dataset YAML based on the example:
 
 ```yaml
 path: /absolute/path/to/lunar-crater-dataset
@@ -136,10 +128,9 @@ Run the test suite:
 pytest tests/test_bfam_modules.py
 ```
 
-The module tests check the output shapes and numerical validity of all four
-custom modules, including the grouped sub-pixel offset layout used by CSCG.
-The model build check above validates registration and a full detector forward
-pass without requiring a dataset or checkpoint.
+The module tests check the output shapes of all four custom modules, including
+the grouped sub-pixel offset layout used by CSCG. The model build check above
+validates module registration and performs a full detector forward pass.
 
 ## License
 
