@@ -1,6 +1,6 @@
 # BFAM-Net
 
-BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑检测器，包含四个
+BFAM-Net 是一个基于 YOLO架构的月球南极永久阴影区（PSR）陨石坑检测器，包含四个
 自定义模块：
 
 - **BFRE**：双向特征表示增强模块，沿水平和垂直方向进行双向状态空间扫描，
@@ -13,12 +13,6 @@ BFAM-Net 是一个基于 YOLO11 的月球南极永久阴影区（PSR）陨石坑
   信息注入高分辨率特征。
 
 `configs/bfam-net.yaml` 使用三类陨石坑：`L-crater`、`M-crater` 和 `S-crater`。
-
-## 仓库范围
-
-本仓库**不包含数据集、图像、标注、模型权重或实验结果**。训练和验证时请通过
-命令行传入本地 YOLO 数据集 YAML。`configs/lunar-crater.example.yaml` 只是路径和
-类别名称模板。
 
 ## 安装
 
